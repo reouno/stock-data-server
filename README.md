@@ -1,5 +1,9 @@
 # stock-data-server
 
+## Requirements
+
+- [Haskell stack](https://docs.haskellstack.org/)
+
 ## Build
 
 ```
