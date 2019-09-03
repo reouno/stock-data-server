@@ -9,7 +9,7 @@ import           Database.Persist.Sql
 import           Database.Persist.Sqlite
 import           Usecase.StockOperator   ( PriceType (..), Stock (..) )
 
-dummyStock = Stock "Apple" "NASDAQ:AAPL" Close [] []
+dummyStock = Stock "Apple" "NASDAQ:AAPL" D1 [] []
 
 type ConnPool = ConnectionPool
 
