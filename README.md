@@ -28,5 +28,3 @@ curl -XGET 127.0.0.1:8080
 ```
 
 You get response of "Hi, I'm Stock API server.".
-
-this is pull request test.
