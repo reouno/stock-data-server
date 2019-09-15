@@ -7,10 +7,10 @@ module Controller.StockServer
   ) where
 
 -- TODO: Do NOT import Config here!! Config should be imported only in Main.
--- TODO: Do NOT imort the Periferal modules here!! Define type class of DataStore to prevent the dependency to Periferal modules
+-- TODO: Do NOT imort the Peripheral modules here!! Define type class of DataStore to prevent the dependency to Peripheral modules
 import           Config.Config           (_database_)
 import           Controller.StockStorage (dummyStock)
-import           Periferal.DataStore     (ConnPool, doMigration, mkPool)
+import           Peripheral.DataStore    (ConnPool, doMigration, mkPool)
 import           Servant
 import           Usecase.StockOperator   (Condition, Stock, StockId,
                                           StockStorable (..))

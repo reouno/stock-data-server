@@ -1,4 +1,4 @@
-module Periferal.DataStore where
+module Peripheral.DataStore where
 
 import           Control.Monad.Logger    (runStderrLoggingT)
 import           Data.String.Conversions (cs)
