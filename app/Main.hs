@@ -1,9 +1,16 @@
 module Main where
 
-import           Controller.StockServer   ( app )
-import           Network.Wai.Handler.Warp ( run )
+import           Controller.StockServer   (app)
+import           Network.Wai.Handler.Warp (defaultSettings, runSettings,
+                                           setBeforeMainLoop, setPort)
+import           System.IO                (hPutStrLn, stderr)
 
 main :: IO ()
 main = do
-  putStrLn "Hello, I'm Stock API server"
-  run 8080 app
+  let port = 8080
+      settings =
+        setPort port $
+        setBeforeMainLoop
+          (hPutStrLn stderr ("Listening on port" ++ show port ++ "..."))
+          defaultSettings
+  runSettings settings =<< app
