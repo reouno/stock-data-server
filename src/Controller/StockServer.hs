@@ -6,10 +6,16 @@ module Controller.StockServer
   ( app
   ) where
 
-import           Controller.StockStorage ( dummyStock )
+-- TODO: Do NOT import Config here!! Config should be imported only in Main.
+-- TODO: Do NOT imort the Peripheral modules here!! Define type class of DataStore to prevent the dependency to Peripheral modules
+import           Config.Config           (_database_)
+import           Controller.StockStorage (dummyStock)
+import           Peripheral.DataStore    (ConnPool, doMigration, mkPool)
 import           Servant
-import           Usecase.StockOperator   ( Condition, Stock, StockId, StockStorable (..) )
+import           Usecase.StockOperator   (Condition, Stock, StockId,
+                                          StockStorable (..))
 
+--class PersistentDataStore pool where
 type StockAPI
    = Get '[ JSON] String -- for test
       :<|> ReqBody '[ JSON] Stock :> Post '[ JSON] String -- add stock data
@@ -22,8 +28,8 @@ type StockAPI
 stockAPI :: Proxy StockAPI
 stockAPI = Proxy
 
-stockServer :: Server StockAPI
-stockServer = testGet :<|> addStock :<|> stockOperations
+stockServer :: ConnPool -> Server StockAPI
+stockServer pool = testGet :<|> addStock :<|> stockOperations
   where
     testGet :: Handler String
     testGet = return "Hi, I'm Stock API server."
@@ -43,5 +49,12 @@ stockServer = testGet :<|> addStock :<|> stockOperations
         deleteStock :: StockId -> Handler String
         deleteStock stockId = return "Cannot detele Stock, please implement me!"
 
-app :: Application
-app = serve stockAPI stockServer
+server :: IO (Server StockAPI)
+server = do
+  pool <- mkPool _database_
+  doMigration pool
+  let server' = stockServer pool
+  return server'
+
+app :: IO Application
+app = serve stockAPI <$> server

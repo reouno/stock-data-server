@@ -1,3 +1,4 @@
 .stack-work/
 stock-data-server.cabal
+*.sqlite3
 *~
