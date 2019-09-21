@@ -1,4 +1,4 @@
-# stock-data-server
+# 📈stock-data-server📉
 
 ## Requirements
 
