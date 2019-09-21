@@ -1,14 +1,14 @@
-name:                stock-data-server
-version:             0.1.0.0
-github:              "githubuser/stock-data-server"
-license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2019 Author name here"
+name: stock-data-server
+version: 0.1.0.0
+github: "githubuser/stock-data-server"
+license: BSD3
+author: "Author name here"
+maintainer: "example@example.com"
+copyright: "2019 Author name here"
 
 extra-source-files:
-- README.md
-- ChangeLog.md
+  - README.md
+  - ChangeLog.md
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
@@ -17,42 +17,46 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/stock-data-server#readme>
+description: Please see the README on GitHub at <https://github.com/githubuser/stock-data-server#readme>
 
 dependencies:
-- base >= 4.7 && < 5
+  - base >= 4.7 && < 5
 
 library:
   source-dirs: src
   dependencies:
-  - aeson
-  - monad-logger
-  - persistent
-  - persistent-sqlite
-  - persistent-template
-  - servant-server
-  - string-conversions
-  - time
+    - aeson
+    - basement
+    - containers
+    - directory
+    - extra
+    - monad-logger
+    - persistent
+    - persistent-sqlite
+    - persistent-template
+    - servant-server
+    - string-conversions
+    - time
 
 executables:
   stock-data-server-exe:
-    main:                Main.hs
-    source-dirs:         app
+    main: Main.hs
+    source-dirs: app
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
     dependencies:
-    - stock-data-server
-    - warp
+      - stock-data-server
+      - warp
 
 tests:
   stock-data-server-test:
-    main:                Spec.hs
-    source-dirs:         test
+    main: Spec.hs
+    source-dirs: test
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
     dependencies:
-    - stock-data-server
+      - stock-data-server
