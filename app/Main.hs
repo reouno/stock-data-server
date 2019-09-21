@@ -1,6 +1,6 @@
 module Main where
 
-import           Controller.StockAPIServer (app)
+import           InterfaceAdapter.StockAPIServer (app)
 import           Network.Wai.Handler.Warp  (defaultSettings, runSettings,
                                             setBeforeMainLoop, setPort)
 import           System.IO                 (hPutStrLn, stderr)

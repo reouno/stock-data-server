@@ -1,7 +1,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE InstanceSigs      #-}
 
-module Controller.StockStorageDBImpl
+module InterfaceAdapter.StockStorageDBImpl
   ( ConnPool(..)
   -- TODO: remove the following exports
   , getStockInfo
@@ -18,8 +18,8 @@ import           Data.String.Conversions        (cs)
 import           Database.Persist.Sql
 import           Database.Persist.Sqlite
 
-import           Controller.StockDataAdapter    (toStock)
-import           Controller.StockModel          (StockInfo (..),
+import           InterfaceAdapter.StockDataAdapter    (toStock)
+import           InterfaceAdapter.StockModel          (StockInfo (..),
                                                  StockPrice (..),
                                                  emptyStockInfo, migrateAll)
 import           Usecase.Interface.StockStorage (StockStorage (..))

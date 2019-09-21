@@ -1,22 +1,22 @@
 {-# LANGUAGE DataKinds     #-}
 {-# LANGUAGE TypeOperators #-}
 
-module Controller.StockAPIServer
+module InterfaceAdapter.StockAPIServer
   ( app
   ) where
 
 -- TODO: Do NOT import Config here!! Config should be imported only in Main.
 import           Config.Config                  (_database_)
 import           Control.Monad                  (when)
-import           Controller.PresentableDataImpl (Stock', StockId')
-import           Controller.StockAPIHandler     (StockAPI (..), stockAPI,
+import           InterfaceAdapter.PresentableDataImpl (Stock', StockId')
+import           InterfaceAdapter.StockAPIHandler     (StockAPI (..), stockAPI,
                                                  stockServer)
-import           Controller.StockModel          (sampleStockInfo1,
+import           InterfaceAdapter.StockModel          (sampleStockInfo1,
                                                  sampleStockInfo2,
                                                  sampleStockPrice1,
                                                  sampleStockPrice2,
                                                  sampleStockPrice3)
-import           Controller.StockStorageDBImpl  (getStockInfo, getStockInfos,
+import           InterfaceAdapter.StockStorageDBImpl  (getStockInfo, getStockInfos,
                                                  getStockPrice, getStockPrices,
                                                  insertStockInfo,
                                                  insertStockPrice)
