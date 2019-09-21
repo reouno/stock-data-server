@@ -1,14 +1,14 @@
 {-# LANGUAGE InstanceSigs         #-}
 {-# LANGUAGE TypeSynonymInstances #-}
 
-module Controller.PresentableDataImpl
+module InterfaceAdapter.PresentableDataImpl
   ( Stock'(..)
   , StockId'(..)
   ) where
 
 import           Data.Char
-import           Entity.Stock                      (Stock (..), StockId)
-import           Usecase.Interface.PresentableData (StockIdPresentable (..),
+import           Usecase.Interface.PresentableData (Stock (..), StockId,
+                                                    StockIdPresentable (..),
                                                     StockPresentable (..))
 
 type Stock' = Stock

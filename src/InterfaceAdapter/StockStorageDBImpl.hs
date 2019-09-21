@@ -1,7 +1,16 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE InstanceSigs      #-}
 
-module Controller.StockDatabase where
+module InterfaceAdapter.StockStorageDBImpl
+  ( ConnPool(..)
+  -- TODO: remove the following exports
+  , getStockInfo
+  , getStockInfos
+  , insertStockInfo
+  , getStockPrice
+  , getStockPrices
+  , insertStockPrice
+  ) where
 
 import           Basement.IntegralConv          (intToInt64)
 import           Control.Monad.Logger           (runStderrLoggingT)
@@ -9,17 +18,12 @@ import           Data.String.Conversions        (cs)
 import           Database.Persist.Sql
 import           Database.Persist.Sqlite
 
-import           Controller.StockDataAdapter    (toStock)
-import           Controller.StockModel          (StockInfo (..),
+import           InterfaceAdapter.StockDataAdapter    (toStock)
+import           InterfaceAdapter.StockModel          (StockInfo (..),
                                                  StockPrice (..),
                                                  emptyStockInfo, migrateAll)
 import           Usecase.Interface.StockStorage (StockStorage (..))
 
--- TODO: How to remove this dependency?
-import           Entity.Stock                   (PriceType (..), Stock (..),
-                                                 StockId)
-
---instance Source FilePath
 type ConnPool = ConnectionPool
 
 instance StockStorage ConnPool where
@@ -27,7 +31,7 @@ instance StockStorage ConnPool where
   mkPool filePath = runStderrLoggingT $ createSqlitePool (cs filePath) 5
   initialize :: ConnPool -> IO ()
   initialize = runSqlPool (runMigration migrateAll)
-  getStockEntity :: ConnPool -> StockId -> IO Stock
+  --getStockEntity :: ConnPool -> StockId -> IO Stock
   getStockEntity pool stockId = do
     let stockInfoId = (toSqlKey . intToInt64) stockId
     mayStockInfo <- getStockInfo pool stockInfoId

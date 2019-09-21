@@ -1,8 +1,8 @@
-module Controller.StockDataAdapter
+module InterfaceAdapter.StockDataAdapter
   ( toStock
   ) where
 
-import qualified Controller.StockModel as CSM
+import qualified InterfaceAdapter.StockModel as CSM
 import           Data.Time             (Day)
 import           Entity.Stock          (PriceType (..), Stock (..),
                                         StockPrice (..))
