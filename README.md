@@ -31,6 +31,6 @@ You get response of "Hi, I'm Stock API server.".
 
 ## Dependency graph
 
-Aiming [Clean Architecture](https://www.amazon.com/Clean-Architecture-Craftsmans-Software-Structure/dp/0134494164), still improving.
+Aiming [Clean Architecture](https://www.amazon.com/Clean-Architecture-Craftsmans-Software-Structure/dp/0134494164), still under improvement.
 
 ![data/modules.png](https://github.com/reouno/stock-data-server/blob/develop/data/modules.png)
