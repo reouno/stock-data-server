@@ -9,13 +9,10 @@ module Controller.StockAPIServer
 -- TODO: Do NOT import Config here!! Config should be imported only in Main.
 import           Config.Config                  (_database_)
 import           Control.Monad                  (when)
+import           Controller.PresentableDataImpl (Stock', StockId')
 import           Controller.StockAPIHandler     (StockAPI (..), stockAPI,
                                                  stockServer)
 import           Controller.StockDataAdapter    (toStock)
-import           Controller.StockDatabase       (getStockInfo, getStockInfos,
-                                                 getStockPrice, getStockPrices,
-                                                 insertStockInfo,
-                                                 insertStockPrice)
 import           Controller.StockModel          (StockInfo (..),
                                                  StockPrice (..),
                                                  emptyStockInfo,
@@ -24,14 +21,19 @@ import           Controller.StockModel          (StockInfo (..),
                                                  sampleStockPrice1,
                                                  sampleStockPrice2,
                                                  sampleStockPrice3)
+import           Controller.StockStorageDBImpl  (getStockInfo, getStockInfos,
+                                                 getStockPrice, getStockPrices,
+                                                 insertStockInfo,
+                                                 insertStockPrice)
 import           Servant
 import           System.Directory
 import           Usecase.Interface.StockStorage (StockStorage (..))
+import           Usecase.StockCondition         (Condition)
 
 import           Database.Persist.Sql
 import           Database.Persist.Sqlite
 
-server :: IO (Server StockAPI)
+server :: IO (Server (StockAPI Stock' StockId' Condition))
 server = do
   fileExists <- doesFileExist _database_
   when fileExists $ removeFile _database_

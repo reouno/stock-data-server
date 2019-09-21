@@ -9,43 +9,78 @@ module Controller.StockAPIHandler
   ) where
 
 import           Control.Monad.IO.Class              (liftIO)
-import           Controller.PresentableDataImpl      (Stock' (..), StockId')
-import           Controller.StockDatabase            (ConnPool)
 import           Servant
 import           Usecase.Interactor.PlainStockServer (serveStockFromStore)
-import           Usecase.StockCondition              (Condition)
+import           Usecase.Interface.PresentableData   (StockIdPresentable (..),
+                                                      StockPresentable (..))
+import           Usecase.Interface.StockStorage      (StockStorage (..))
 
---class PersistentDataStore pool where
-type StockAPI
+type StockAPI stock stockId condition
    = Get '[ JSON] String -- for test
-      :<|> ReqBody '[ JSON] Stock' :> Post '[ JSON] String -- add stock data
-      :<|> Capture "stockId" StockId' :> (Get '[ JSON] Stock' -- get stock data
-                                           :<|> ReqBody '[ JSON] Condition :> Post '[ JSON] Stock' -- get stock data by specific condition
-                                           :<|> ReqBody '[ JSON] Stock' :> Put '[ JSON] String -- update stock data
-                                           :<|> Delete '[ JSON] String -- delete stock data
-                                          )
+      :<|> ReqBody '[ JSON] stock :> Post '[ JSON] String -- add stock data
+      :<|> Capture "stockId" stockId :> (Get '[ JSON] stock -- get stock data
+                                          :<|> ReqBody '[ JSON] condition :> Post '[ JSON] stock -- get stock data by specific condition
+                                          :<|> ReqBody '[ JSON] stock :> Put '[ JSON] String -- update stock data
+                                          :<|> Delete '[ JSON] String -- delete stock data
+                                         )
 
-stockAPI :: Proxy StockAPI
+stockAPI :: Proxy (StockAPI stock stockId condition)
 stockAPI = Proxy
 
-stockServer :: ConnPool -> Server StockAPI
-stockServer pool = testGet :<|> addStock :<|> stockOperations pool
+stockServer ::
+     (StockStorage pool, StockPresentable stock, StockIdPresentable stockId)
+  => pool
+  -> Server (StockAPI stock stockId condition)
+stockServer pool = testGet :<|> addStock pool :<|> stockOperations pool
   where
     testGet :: Handler String
     testGet = return "Hi, I'm Stock API server."
-    addStock :: Stock' -> Handler String
-    addStock stock = return "Cannot add new Stock, please implement me!"
+    addStock ::
+         (StockStorage pool, StockPresentable stock)
+      => pool
+      -> stock
+      -> Handler String
+    addStock pool stock = return "Cannot add new Stock, please implement me!"
     stockOperations pool stockId =
-      getStock pool stockId :<|> getStockBy stockId :<|> updateStock stockId :<|>
-      deleteStock stockId
+      getStock pool stockId :<|> getStockBy pool stockId :<|>
+      updateStock pool stockId :<|>
+      deleteStock pool stockId
       where
-        getStock :: ConnPool -> StockId' -> Handler Stock'
+        getStock ::
+             ( StockStorage pool
+             , StockPresentable stock
+             , StockIdPresentable stockId
+             )
+          => pool
+          -> stockId
+          -> Handler stock
         getStock pool stockId = liftIO $ serveStockFromStore pool stockId
-        getStockBy :: StockId' -> Condition -> Handler Stock'
-        getStockBy stockId condition =
+        getStockBy ::
+             ( StockStorage pool
+             , StockPresentable stock
+             , StockIdPresentable stockId
+             )
+          => pool
+          -> stockId
+          -> condition
+          -> Handler stock
+        getStockBy pool stockId condition =
           error "`getStockBy` was called. Not implemented yet."
-        updateStock :: StockId' -> Stock' -> Handler String
-        updateStock stockId stock =
+        updateStock ::
+             ( StockStorage pool
+             , StockPresentable stock
+             , StockIdPresentable stockId
+             )
+          => pool
+          -> stockId
+          -> stock
+          -> Handler String
+        updateStock pool stockId stock =
           return "Cannot update Stock, please implement me!"
-        deleteStock :: StockId' -> Handler String
-        deleteStock stockId = return "Cannot detele Stock, please implement me!"
+        deleteStock ::
+             (StockStorage pool, StockIdPresentable stockId)
+          => pool
+          -> stockId
+          -> Handler String
+        deleteStock pool stockId =
+          return "Cannot detele Stock, please implement me!"
