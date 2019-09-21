@@ -6,24 +6,25 @@ module InterfaceAdapter.StockAPIServer
   ) where
 
 -- TODO: Do NOT import Config here!! Config should be imported only in Main.
-import           Config.Config                  (_database_)
-import           Control.Monad                  (when)
-import           InterfaceAdapter.PresentableDataImpl (Stock', StockId')
-import           InterfaceAdapter.StockAPIHandler     (StockAPI (..), stockAPI,
-                                                 stockServer)
-import           InterfaceAdapter.StockModel          (sampleStockInfo1,
-                                                 sampleStockInfo2,
-                                                 sampleStockPrice1,
-                                                 sampleStockPrice2,
-                                                 sampleStockPrice3)
-import           InterfaceAdapter.StockStorageDBImpl  (getStockInfo, getStockInfos,
-                                                 getStockPrice, getStockPrices,
-                                                 insertStockInfo,
-                                                 insertStockPrice)
+import           Config.Config                                     (_database_)
+import           Control.Monad                                     (when)
+import           InterfaceAdapter.DataStore.StockDBHandler         (insertStockInfo,
+                                                                    insertStockPrice)
+import           InterfaceAdapter.DataStore.StockDBModel           (sampleStockInfo1,
+                                                                    sampleStockInfo2,
+                                                                    sampleStockPrice1,
+                                                                    sampleStockPrice2,
+                                                                    sampleStockPrice3)
+import           InterfaceAdapter.DataStore.StockStorageSqliteImpl (ConnPool)
+import           InterfaceAdapter.Presenter.PresentableDataImpl    (Stock',
+                                                                    StockId')
+import           InterfaceAdapter.Presenter.StockAPIHandler        (StockAPI (..),
+                                                                    stockAPI,
+                                                                    stockServer)
 import           Servant
 import           System.Directory
-import           Usecase.Interface.StockStorage (StockStorage (..))
-import           Usecase.StockCondition         (Condition)
+import           Usecase.Interface.StockStorage                    (StockStorage (..))
+import           Usecase.StockCondition                            (Condition)
 
 import           Database.Persist.Sql
 import           Database.Persist.Sqlite

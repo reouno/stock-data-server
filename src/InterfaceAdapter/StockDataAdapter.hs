@@ -2,11 +2,12 @@ module InterfaceAdapter.StockDataAdapter
   ( toStock
   ) where
 
-import qualified InterfaceAdapter.StockModel as CSM
-import           Data.Time             (Day)
-import           Entity.Stock          (PriceType (..), Stock (..),
-                                        StockPrice (..))
-import           Numeric.Extra         (doubleToFloat)
+import           Data.Time                               (Day)
+import           Entity.Stock                            (PriceType (..),
+                                                          Stock (..),
+                                                          StockPrice (..))
+import qualified InterfaceAdapter.DataStore.StockDBModel as CSM
+import           Numeric.Extra                           (doubleToFloat)
 
 toStock :: CSM.StockInfo -> [CSM.StockPrice] -> Stock
 toStock info prices =

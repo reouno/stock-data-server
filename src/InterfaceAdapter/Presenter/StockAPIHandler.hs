@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeOperators     #-}
 
-module InterfaceAdapter.StockAPIHandler
+module InterfaceAdapter.Presenter.StockAPIHandler
   ( StockAPI(..)
   , stockAPI
   , stockServer

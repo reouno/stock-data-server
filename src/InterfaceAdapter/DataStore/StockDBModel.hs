@@ -11,7 +11,7 @@
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeFamilies               #-}
 
-module InterfaceAdapter.StockModel
+module InterfaceAdapter.DataStore.StockDBModel
   ( migrateAll
   , StockInfo(..)
   , StockPrice(..)
