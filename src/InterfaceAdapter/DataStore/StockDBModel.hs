@@ -23,11 +23,11 @@ module InterfaceAdapter.DataStore.StockDBModel
   , sampleStockPrice3
   ) where
 
-import           Data.Time            (Day, UTCTime, fromGregorian)
+import           Data.Time            ( Day, UTCTime, fromGregorian )
 import           Database.Persist
 import           Database.Persist.Sql
 import           Database.Persist.TH
-import           GHC.Generics         (Generic)
+import           GHC.Generics         ( Generic )
 
 share
   [mkPersist sqlSettings, mkMigrate "migrateAll"]
@@ -38,10 +38,10 @@ StockInfo json
     deriving Read Eq Generic Show
 StockPrice json
     stockId Int
-    openPrice Double
+    openPrice Double Maybe
     closePrice Double
-    highPrice Double
-    lowPrice Double
+    highPrice Double Maybe
+    lowPrice Double Maybe
     priceDate Day
     createdAt UTCTime default=CURRENT_TIMESTAMP
     deriving Read Eq Generic Show
@@ -56,29 +56,29 @@ sampleStockInfo2 = StockInfo "Alphabet, Inc." "GOOG"
 sampleStockPrice1 =
   StockPrice
     1
-    220.00
+    (Just 220.00)
     223.09
-    220.79
-    217.02
+    (Just 220.79)
+    (Just 217.02)
     (fromGregorian 2019 09 13)
     (read "2019-09-16 14:00:00.012345 UTC" :: UTCTime)
 
 sampleStockPrice2 =
   StockPrice
     2
-    1231.35
+    (Just 1231.35)
     1234.25
-    1240.88
-    1227.01
+    (Just 1240.88)
+    (Just 1227.01)
     (fromGregorian 2019 09 13)
     (read "2019-09-16 15:00:00.0 UTC" :: UTCTime)
 
 sampleStockPrice3 =
   StockPrice
     1
-    230.00
+    (Just 230.00)
     233.09
-    230.79
-    227.02
+    (Just 230.79)
+    (Just 227.02)
     (fromGregorian 2019 09 12)
     (read "2019-09-16 16:00:00.5 UTC" :: UTCTime)

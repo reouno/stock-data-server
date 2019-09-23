@@ -8,16 +8,16 @@ module InterfaceAdapter.Presenter.StockAPIHandler
   , stockServer
   ) where
 
-import           Control.Monad.IO.Class              (liftIO)
+import           Control.Monad.IO.Class              ( liftIO )
 import           Servant
-import           Usecase.Interactor.PlainStockServer (serveStockFromStore)
-import           Usecase.Interface.PresentableData   (StockIdPresentable (..),
-                                                      StockPresentable (..))
-import           Usecase.Interface.StockStorage      (StockStorage (..))
+import           Usecase.Interactor.PlainStockServer ( addStockToStore, serveStockFromStore )
+import           Usecase.Interface.PresentableData   ( StockIdPresentable (..),
+                                                       StockPresentable (..) )
+import           Usecase.Interface.StockStorage      ( StockStorage (..) )
 
 type StockAPI stock stockId condition
    = Get '[ JSON] String -- for test
-      :<|> ReqBody '[ JSON] stock :> Post '[ JSON] String -- add stock data
+      :<|> ReqBody '[ JSON] stock :> Post '[ JSON] stockId -- add stock data
       :<|> Capture "stockId" stockId :> (Get '[ JSON] stock -- get stock data
                                           :<|> ReqBody '[ JSON] condition :> Post '[ JSON] stock -- get stock data by specific condition
                                           :<|> ReqBody '[ JSON] stock :> Put '[ JSON] String -- update stock data
@@ -36,11 +36,11 @@ stockServer pool = testGet :<|> addStock pool :<|> stockOperations pool
     testGet :: Handler String
     testGet = return "Hi, I'm Stock API server."
     addStock ::
-         (StockStorage pool, StockPresentable stock)
+         (StockStorage pool, StockPresentable stock, StockIdPresentable stockId)
       => pool
       -> stock
-      -> Handler String
-    addStock pool stock = return "Cannot add new Stock, please implement me!"
+      -> Handler stockId
+    addStock pool stock = liftIO $ addStockToStore pool stock
     stockOperations pool stockId =
       getStock pool stockId :<|> getStockBy pool stockId :<|>
       updateStock pool stockId :<|>
