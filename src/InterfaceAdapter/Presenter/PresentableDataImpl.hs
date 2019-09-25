@@ -1,7 +1,7 @@
 {-# LANGUAGE InstanceSigs         #-}
 {-# LANGUAGE TypeSynonymInstances #-}
 
-module InterfaceAdapter.PresentableDataImpl
+module InterfaceAdapter.Presenter.PresentableDataImpl
   ( Stock'(..)
   , StockId'(..)
   ) where

@@ -1,9 +1,9 @@
 module Main where
 
-import           InterfaceAdapter.StockAPIServer (app)
-import           Network.Wai.Handler.Warp  (defaultSettings, runSettings,
-                                            setBeforeMainLoop, setPort)
-import           System.IO                 (hPutStrLn, stderr)
+import           InterfaceAdapter.StockAPIServer ( app )
+import           Network.Wai.Handler.Warp        ( defaultSettings, runSettings, setBeforeMainLoop,
+                                                   setPort )
+import           System.IO                       ( hPutStrLn, stderr )
 
 main :: IO ()
 main = do
