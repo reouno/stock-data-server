@@ -1,6 +1,7 @@
 module Usecase.Interactor.PlainStockServer
   ( serveStockFromStore
   , addStockToStore
+  , deleteStockByStockId
   ) where
 
 import           Usecase.Interface.PresentableData ( StockIdPresentable (..),
@@ -23,3 +24,8 @@ addStockToStore ::
 addStockToStore pool presentableStock =
   toPresentableStockId <$>
   addStockEntity pool (fromPresentableStock presentableStock)
+
+deleteStockByStockId ::
+     (StockStorage pool, StockIdPresentable stockId) => pool -> stockId -> IO ()
+deleteStockByStockId pool stockId =
+  deleteStockEntity pool $ fromPresentableStockId stockId

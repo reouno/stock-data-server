@@ -11,17 +11,7 @@
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeFamilies               #-}
 
-module InterfaceAdapter.DataStore.StockDBModel
-  ( migrateAll
-  , StockInfo(..)
-  , StockPrice(..)
-  , emptyStockInfo
-  , sampleStockInfo1
-  , sampleStockInfo2
-  , sampleStockPrice1
-  , sampleStockPrice2
-  , sampleStockPrice3
-  ) where
+module InterfaceAdapter.DataStore.StockDBModel where
 
 import           Data.Time            ( Day, UTCTime, fromGregorian )
 import           Database.Persist

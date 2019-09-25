@@ -10,10 +10,11 @@ module InterfaceAdapter.Presenter.StockAPIHandler
 
 import           Control.Monad.IO.Class              ( liftIO )
 import           Servant
-import           Usecase.Interactor.PlainStockServer ( addStockToStore, serveStockFromStore )
+import           Usecase.Interactor.PlainStockServer ( addStockToStore, deleteStockByStockId,
+                                                       serveStockFromStore )
 import           Usecase.Interface.PresentableData   ( StockIdPresentable (..),
                                                        StockPresentable (..) )
-import           Usecase.Interface.StockStorage      ( StockStorage (..) )
+import           Usecase.Interface.StockStorage      ( StockStorage )
 
 type StockAPI stock stockId condition
    = Get '[ JSON] String -- for test
@@ -21,7 +22,7 @@ type StockAPI stock stockId condition
       :<|> Capture "stockId" stockId :> (Get '[ JSON] stock -- get stock data
                                           :<|> ReqBody '[ JSON] condition :> Post '[ JSON] stock -- get stock data by specific condition
                                           :<|> ReqBody '[ JSON] stock :> Put '[ JSON] String -- update stock data
-                                          :<|> Delete '[ JSON] String -- delete stock data
+                                          :<|> Delete '[ JSON] NoContent -- delete stock data
                                          )
 
 stockAPI :: Proxy (StockAPI stock stockId condition)
@@ -81,6 +82,8 @@ stockServer pool = testGet :<|> addStock pool :<|> stockOperations pool
              (StockStorage pool, StockIdPresentable stockId)
           => pool
           -> stockId
-          -> Handler String
+          -> Handler NoContent
         deleteStock pool stockId =
-          return "Cannot detele Stock, please implement me!"
+          liftIO $ do
+            deleteStockByStockId pool stockId
+            return NoContent

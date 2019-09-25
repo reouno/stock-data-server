@@ -18,7 +18,8 @@ import           Data.String.Conversions                   ( cs )
 import           Data.Time                                 ( getCurrentTime )
 import           Database.Persist.Sqlite
 
-import           InterfaceAdapter.DataStore.StockDBHandler ( getStockInfo, getStockInfos,
+import           InterfaceAdapter.DataStore.StockDBHandler ( deleteStockInfo, deleteStockPrices,
+                                                             getStockInfo, getStockInfos,
                                                              getStockPrice, getStockPrices,
                                                              insertStockInfo, insertStockPrice )
 import           InterfaceAdapter.DataStore.StockDBModel   ( StockInfo (..), StockPrice (..),
@@ -60,3 +61,7 @@ instance StockStorage ConnPool where
           ] -- only Apple stock data
         thisStockData = toStock thisStockInfo (map entityVal thisStockPrices)
     return thisStockData
+  deleteStockEntity pool stockId = do
+    let stockInfoId = (toSqlKey . intToInt64) stockId
+    deleteStockPrices pool stockInfoId
+    deleteStockInfo pool stockInfoId

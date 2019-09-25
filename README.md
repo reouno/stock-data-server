@@ -39,6 +39,9 @@ curl -XPOST -H 'Accept: application/json' -H 'Content-type: application/json' -d
 
 # example of getting stock data by specifing stock ID
 curl -XGET 127.0.0.1:8080/1
+
+# example of deleting stock data by specifing stock ID
+curl -XDELETE 127.0.0.1:8080/1
 ```
 
 ## Dependency graph

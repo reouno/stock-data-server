@@ -13,3 +13,4 @@ class StockStorage pool where
   initialize :: pool -> IO ()
   addStockEntity :: pool -> Stock -> IO StockId
   getStockEntity :: pool -> StockId -> IO Stock -- get all data of the stock ID
+  deleteStockEntity :: pool -> StockId -> IO ()
