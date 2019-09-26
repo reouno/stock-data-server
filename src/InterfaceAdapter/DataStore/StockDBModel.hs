@@ -4,6 +4,7 @@
 {-# LANGUAGE FlexibleInstances          #-}
 {-# LANGUAGE GADTs                      #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE InstanceSigs               #-}
 {-# LANGUAGE MultiParamTypeClasses      #-}
 {-# LANGUAGE OverloadedStrings          #-}
 {-# LANGUAGE QuasiQuotes                #-}
@@ -13,11 +14,12 @@
 
 module InterfaceAdapter.DataStore.StockDBModel where
 
-import           Data.Time            ( Day, UTCTime, fromGregorian )
+import           Data.Time                      ( Day, UTCTime, fromGregorian )
 import           Database.Persist
 import           Database.Persist.Sql
 import           Database.Persist.TH
-import           GHC.Generics         ( Generic )
+import           GHC.Generics                   ( Generic )
+import           Usecase.Interface.StorableData ( StorableStockInfo (..), StorableStockPrice (..) )
 
 share
   [mkPersist sqlSettings, mkMigrate "migrateAll"]
@@ -36,6 +38,17 @@ StockPrice json
     createdAt UTCTime default=CURRENT_TIMESTAMP
     deriving Read Eq Generic Show
 |]
+
+instance StorableStockInfo StockInfo where
+  toStorableStockInfo :: String -> String -> StockInfo
+  toStorableStockInfo = StockInfo
+  fromStorableStockInfo :: StockInfo -> (String, String)
+  fromStorableStockInfo (StockInfo name tickerSymbol) = (name, tickerSymbol)
+
+instance StorableStockPrice StockPrice where
+  toStorableStockPrice = StockPrice
+  fromStorableStockPrice (StockPrice sId op cp hp lp pd cAt) =
+    (sId, op, cp, hp, lp, pd, cAt)
 
 emptyStockInfo = StockInfo "" ""
 

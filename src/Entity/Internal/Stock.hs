@@ -19,10 +19,10 @@ type TickerSymbol = String
 
 data StockPrice =
   StockPrice
-    { openPrice  :: Maybe Float
-    , closePrice :: Float
-    , highPrice  :: Maybe Float
-    , lowPrice   :: Maybe Float
+    { stockPriceOpenPrice  :: Maybe Float
+    , stockPriceClosePrice :: Float
+    , stockPriceHighPrice  :: Maybe Float
+    , stockPriceLowPrice   :: Maybe Float
     }
   deriving (Eq, Generic, Show)
 
@@ -46,11 +46,11 @@ instance ToJSON PriceType
 
 data Stock =
   Stock
-    { stockName       :: StockName
-    , tickerSymbol    :: TickerSymbol
-    , priceType       :: PriceType
-    , prices          :: [StockPrice]
-    , priceTimestamps :: [Day]
+    { stockEntName            :: StockName
+    , stockEntTickerSymbol    :: TickerSymbol
+    , stocKEntPriceType       :: PriceType
+    , stockEntPrices          :: [StockPrice]
+    , stockEntPriceTimestamps :: [Day]
     }
   deriving (Eq, Generic, Show)
 

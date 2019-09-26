@@ -12,21 +12,22 @@ module InterfaceAdapter.DataStore.StockStorageSqliteImpl
   , insertStockPrice
   ) where
 
-import           Basement.IntegralConv                     ( intToInt64 )
-import           Control.Monad.Logger                      ( runStderrLoggingT )
-import           Data.String.Conversions                   ( cs )
-import           Data.Time                                 ( getCurrentTime )
+import           Basement.IntegralConv                       ( intToInt64 )
+import           Control.Monad.Logger                        ( runStderrLoggingT )
+import           Data.String.Conversions                     ( cs )
+import           Data.Time                                   ( getCurrentTime )
 import           Database.Persist.Sqlite
 
-import           InterfaceAdapter.DataStore.StockDBHandler ( deleteStockInfo, deleteStockPrices,
-                                                             getStockInfo, getStockInfos,
-                                                             getStockPrice, getStockPrices,
-                                                             insertStockInfo, insertStockPrice )
-import           InterfaceAdapter.DataStore.StockDBModel   ( StockInfo (..), StockPrice (..),
-                                                             emptyStockInfo, migrateAll )
-import           InterfaceAdapter.StockDataAdapter         ( fromStockToStockInfo,
-                                                             fromStockToStockPrices, toStock )
-import           Usecase.Interface.StockStorage            ( StockStorage (..) )
+import           InterfaceAdapter.DataStore.StockDBHandler   ( deleteStockInfo, deleteStockPrices,
+                                                               getStockInfo, getStockInfos,
+                                                               getStockPrice, getStockPrices,
+                                                               insertStockInfo, insertStockPrice )
+import           InterfaceAdapter.DataStore.StockDBModel     ( StockInfo (..), StockPrice (..),
+                                                               emptyStockInfo, migrateAll )
+import           Usecase.Interactor.Adapter.StockDataAdapter ( fromStockToStorableStockInfo,
+                                                               fromStockToStorableStockPrices,
+                                                               toStock )
+import           Usecase.Interface.StockStorage              ( StockStorage (..) )
 
 type ConnPool = ConnectionPool
 
@@ -38,10 +39,10 @@ instance StockStorage ConnPool where
   --addStockEntity :: ConnPool -> Stock -> IO StockId
   addStockEntity pool stock = do
     now <- getCurrentTime
-    let stockInfo = fromStockToStockInfo stock
+    let stockInfo = fromStockToStorableStockInfo stock
     stockInfoKey <- insertStockInfo pool stockInfo
     let stockId = fromIntegral $ fromSqlKey stockInfoKey :: Int
-        stockPrices = fromStockToStockPrices stock stockId now
+        stockPrices = fromStockToStorableStockPrices stock stockId now
     mapM_ (insertStockPrice pool) stockPrices
     return stockId
   --getStockEntity :: ConnPool -> StockId -> IO Stock
