@@ -10,8 +10,8 @@ module InterfaceAdapter.Presenter.StockAPIHandler
 
 import           Control.Monad.IO.Class              ( liftIO )
 import           Servant
-import           Usecase.Interactor.PlainStockServer ( addStockToStore, deleteStockByStockId,
-                                                       serveStockFromStore )
+import           Usecase.Interactor.PlainStockServer ( addStockToStore, appendStockPrice2Store,
+                                                       deleteStockByStockId, serveStockFromStore )
 import           Usecase.Interface.PresentableData   ( StockIdPresentable (..),
                                                        StockPresentable (..) )
 import           Usecase.Interface.StockStorage      ( StockStorage )
@@ -21,6 +21,7 @@ type StockAPI stock stockId condition
       :<|> ReqBody '[ JSON] stock :> Post '[ JSON] stockId -- add stock data
       :<|> Capture "stockId" stockId :> (Get '[ JSON] stock -- get stock data
                                           :<|> ReqBody '[ JSON] condition :> Post '[ JSON] stock -- get stock data by specific condition
+                                          :<|> "append" :> ReqBody '[ JSON] stock :> Post '[ JSON] NoContent -- append new data
                                           :<|> ReqBody '[ JSON] stock :> Put '[ JSON] String -- update stock data
                                           :<|> Delete '[ JSON] NoContent -- delete stock data
                                          )
@@ -44,6 +45,7 @@ stockServer pool = testGet :<|> addStock pool :<|> stockOperations pool
     addStock pool stock = liftIO $ addStockToStore pool stock
     stockOperations pool stockId =
       getStock pool stockId :<|> getStockBy pool stockId :<|>
+      appendStock pool stockId :<|>
       updateStock pool stockId :<|>
       deleteStock pool stockId
       where
@@ -67,6 +69,19 @@ stockServer pool = testGet :<|> addStock pool :<|> stockOperations pool
           -> Handler stock
         getStockBy pool stockId condition =
           error "`getStockBy` was called. Not implemented yet."
+        appendStock ::
+             ( StockStorage pool
+             , StockPresentable stock
+             , StockIdPresentable stockId
+             )
+          => pool
+          -> stockId
+          -> stock
+          -> Handler NoContent
+        appendStock pool stockId stock =
+          liftIO $ do
+            appendStockPrice2Store pool stockId stock
+            return NoContent
         updateStock ::
              ( StockStorage pool
              , StockPresentable stock

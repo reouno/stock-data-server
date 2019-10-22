@@ -45,6 +45,11 @@ instance StockStorage ConnPool where
         stockPrices = fromStockToStorableStockPrices stock stockId now
     mapM_ (insertStockPrice pool) stockPrices
     return stockId
+  -- appendStockPrice2Entity :: ConnPool -> StockId -> Stock -> IO ()
+  appendStockPrice2Entity pool stockId stock = do
+    now <- getCurrentTime
+    let stockPrices = fromStockToStorableStockPrices stock stockId now
+    mapM_ (insertStockPrice pool) stockPrices
   --getStockEntity :: ConnPool -> StockId -> IO Stock
   getStockEntity pool stockId = do
     let stockInfoId = (toSqlKey . intToInt64) stockId

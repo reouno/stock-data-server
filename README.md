@@ -33,9 +33,14 @@ You get response of "Hi, I'm Stock API server.".
 You can test also adding stock data and getting them like following examples.
 
 ```
-# example of adding new stock data
+# example of adding new stock entity (new name)
 curl -XPOST -H 'Accept: application/json' -H 'Content-type: application/json' -d '{"tickerSymbol":"AMZN","stockName":"Amazon.com", "priceType":"D1","priceTimestamps":["2019-09-19","2019-09-20"],"prices":[{"closePrice":1721.50,"openPrice":null,"highPrice":null,"lowPrice":null},{"closePrice":1821.50,"openPrice":1821.71,"highPrice":1830.63,"lowPrice":1780.92}]}' 127.0.0.1:8080
 --> some int number which is the stock ID (brand ID)
+
+# example of appending stock price data into existing stock entity
+# {stockId} is stock ID with int number.
+curl -XPOST -H 'Accept: application/json' -H 'Content-type: application/json' -d '{"tickerSymbol":"AMZN","stockName":"Amazon.com", "priceType":"D1","priceTimestamps":["2019-09-19","2019-09-20"],"prices":[{"closePrice":1721.50,"openPrice":null,"highPrice":null,"lowPrice":null},{"closePrice":1821.50,"openPrice":1821.71,"highPrice":1830.63,"lowPrice":1780.92}]}' 127.0.0.1:8080/{stockId}/append
+--> return no content
 
 # example of getting stock data by specifing stock ID
 curl -XGET 127.0.0.1:8080/1
